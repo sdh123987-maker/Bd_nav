@@ -1,0 +1,14 @@
+# ROS 2 빌드, 설치, 로그 폴더 무시
+build/
+install/
+log/
+
+# 파이썬 찌꺼기 캐시 파일 무시
+__pycache__/
+*.pyc
+*.pyo
+
+# 에디터 임시 파일 및 시스템 찌꺼기 파일 무시
+*.swp
+*~
+.DS_Store

@@ -1,0 +1,147 @@
+**If the user reply does NOT explicitly mention changing destination, waypoints, or avoidance, you MUST return the exact same user_output as before without any modification. No inferred or assumed changes are allowed.**
+You will be given:
+
+1. A previously generated structured user_output (with ranked_destinations as a list of up to 4 items).  
+2. A user reply that may modify the route.  
+3. A list of valid place_names (each with {name, "feature"}) that must be used.
+
+Your task is to:
+- Interpret the user's reply.
+- Update the previous user_output based on this reply.
+- Maintain ranked_destinations as a list of exactly 4 ranked candidates:
+  - 1st-ranked is the primary destination.
+  - 2nd–4th are alternative candidates for status display.
+  - Ranking must consider both place name and feature type.
+  - Only use names from the provided list.
+  - If there are fewer than 4 possible candidates, fill the remaining slots with "None".
+- Only use place names from the provided list for waypoints/avoidance unless the reply contains numeric references (e.g., "278522", "178721"), in which case keep the numbers exactly as provided.
+- If the reply does **not explicitly mention** changing destination, waypoints, or avoidance, retain the original values.
+- Do **not** delete or overwrite any list unless the user’s intent is clear.
+- If a field was empty before and the reply does not mention it, leave it unchanged.
+- Never reinterpret numeric IDs — keep them exactly as given.
+- If the reply contains **node connection instructions** such as:
+    • "X then Y"
+    • "after X then Y"
+    • "X-Y"
+  where X and Y are both **integer**, then:
+    - Add "X-Y" as a single item in the `waypoint` list at the correct position.
+    - Do not replace X or Y with place names.
+
+Return the updated user_output in this format:
+
+destination: [1st, 2nd, 3rd, 4th]  
+waypoint: [updated waypoints]  
+avoidance: [updated avoidance list]  
+condition: updated constraint description (if any)
+
+If no changes are needed, repeat the original values exactly.
+If there are no constraints, set condition to "No condition".
+**If the user reply does NOT explicitly mention changing destination, waypoints, or avoidance, you MUST return the exact same user_output as before without any modification. No inferred or assumed changes are allowed.**
+---
+[user_output]
+<original structured output>
+
+[path_reply]
+<user's free-form reply>
+
+[place_names]
+<list of valid place names>
+
+Now generate the revised user_output.
+
+---
+
+Output Examples without [place_names]:
+
+[user_output]
+ranked_destinations: ["Student Cafeteria", "Central Park", "None"],
+destination: Jaha-yeon,  
+waypoint: []  
+avoidance: []  
+condition: No condition
+
+[path_reply]
+"pass through the Engineering Building on the way and avoid node number 2"
+
+[Output Example 1]
+destination: [Jaha-yeon, Student Cafeteria, Central Park, None]  
+waypoint: [Engineering Building]  
+avoidance: [2]  
+condition: No condition
+
+---
+
+[user_output]
+ranked_destinations: ["Student Center", "KB Bank", "None"]
+destination: University Library
+waypoint: []  
+avoidance: []  
+condition: Pass through indoor passages
+
+[path_reply]
+"Avoid the stairs and pass through node number 3 and number 4."
+
+[Output Example 2]
+destination: [University Library, Student Center, KB Bank, None]
+waypoint: [3, 4]  
+avoidance: []  
+condition: Pass through indoor passages, avoid stairs
+
+---
+
+[user_output]
+ranked_destinations: ["Student Center", "KB Bank", "None"]
+destination: University Library
+waypoint: [KB Bank, Student Center]  
+avoidance: [Construction Site]  
+condition: No condition
+
+[path_reply]
+"Add the Student hall before the Student Center, and avoid the Construction Site"
+
+[Output Example 3]
+destination: [University Library, Student Center, KB Bank, None]
+waypoint: [KB Bank, Student hall, Student Center]  
+avoidance: []  
+condition: No condition
+
+---
+
+[user_output]
+ranked_destinations: ["Student Center", "KB Bank", "None"]
+destination: University Library
+waypoint: [KB Bank, Student Center]  
+avoidance: [Construction Site]  
+condition: No condition
+
+[path_reply]
+"Stop at node number 10"
+
+[Output Example 4]
+destination: 10
+waypoint: [KB Bank, Student Center]  
+avoidance: []  
+condition: No condition
+
+---
+
+[user_output]
+ranked_destinations: ["Student Center", "KB Bank", "None"]
+destination: University Library
+waypoint: [KB Bank, Student Center]  
+avoidance: [Construction Site]  
+condition: No condition
+
+[path_reply]
+"After node 5, proceed past node 10."
+
+[Output Example 4]
+destination: [University Library, Student Center, KB Bank, None]
+waypoint: [KB Bank, Student Center, 5-10]  
+avoidance: []  
+condition: No condition
+
+---
+
+
+Now complete the following task:
