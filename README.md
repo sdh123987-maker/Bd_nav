@@ -1,6 +1,6 @@
 # Beyond Destinations: Instruction-Aware Graph Path Planning and Navigation with OpenStreetMap
 
-[Donghwi Jung](https://donghwijung.github.io/), Jihun Moon, Jiyang Lee, DongYeop Shin, Jungjae Lee, Jinhee Kim, [Seong-Woo Kim](https://arisnu.squarespace.com/director)
+[Donghwi Jung](https://donghwijung.github.io/), Jihun Moon, Jiyang Lee, DongYeop Shin, Jungjae Lee, Jinhee Kim, Mingyu Kim [Seong-Woo Kim](https://arisnu.squarespace.com/director)
 
 We present **BD-Nav**, a navigation framework that uses large language models (LLMs) and OpenStreetMap (OSM) data to generate routes based on free-form natural language instructions. BD-Nav goes beyond identifying destinations by considering user-specified conditions such as safety, weather, and avoidance constraints. Validated through real-world experiments with a quadruped robot, it provides accurate, robust, and user-centered navigation without requiring pre-built maps.
 
