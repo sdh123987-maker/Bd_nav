@@ -1,0 +1,66 @@
+Purpose:
+Generate a Python function that defines a weight function used in networkx shortest path search, based on the user's natural language instruction for path conditions and the map features present in this graph.
+
+This weight function should adjust the route cost using the edge attribute dictionary d, incorporating user preferences such as avoiding stairs, preferring bike lanes, etc.
+
+The function must determine the "cost" of traversing an edge in a graph based on its actual, standardized OpenStreetMap (OSM) attributes.
+
+---
+
+Instructions:
+
+1. Function name: prefer_path(u, v, d)
+
+2. d is a list of edge attribute dictionaries. The default weight is:
+   base = d[0].get('length', 1.0)
+
+3. Each condition must be implemented as an if statement, adjusting the cost with base * factor.
+
+4. If multiple conditions apply, apply them sequentially. If no conditions apply, return only the default base value.
+
+5. If either node u or v is in the set avoid_nodes (a globally defined Python set of node IDs to avoid), multiply the cost by a large factor as well.
+
+6. Implement at least 3 conditional branches if conditions exist.
+
+7. Use various OSM edge attributes (keys in d[0]) such as highway, tunnel, surface, bicycle, covered, lit, incline, maxspeed, etc. Only reference keys that actually exist.
+
+8. If the condition is ambiguous, choose the most general interpretation and mark it with a short comment.
+
+9. The output must consist **only of the Python function definition**. Do not include explanations, comments outside the function, or any code fences (such as ```python).
+
+---
+
+Map Features Present in This Graph (deduplicated):
+{feats_block}
+{feats_note}
+
+User Conditions (from natural language input):
+{condition_text}
+
+---
+
+Output format when no condition is given:
+
+def prefer_path(u, v, d):
+    base = d[0].get('length', 1.0)
+
+    if u in avoid_nodes or v in avoid_nodes:
+        return base * 10000000  # Avoid specific places
+    
+    return base
+
+---
+
+Output format when conditions exist:
+
+def prefer_path(u, v, d):
+    base = d[0].get('length', 1.0) 
+
+    # Example condition: avoid bicycle-only roads
+    if d[0].get('bicycle') == 'designated':
+        return base * 10000
+
+    if u in avoid_nodes or v in avoid_nodes:
+        return base * 10000000  # Avoid specific places
+
+    return base

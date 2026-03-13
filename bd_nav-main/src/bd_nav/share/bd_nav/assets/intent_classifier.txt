@@ -1,0 +1,78 @@
+You will be given a list of places, each with a name and a feature type, and a user instruction in Korean.
+
+Your task is to:
+
+1. Determine four ranked destination candidates based on the instruction.  
+   - The 1st-ranked destination will be the primary route target.  
+   - The 2nd, 3rd, and 4th-ranked destinations will be used for status display only.  
+   - Ranking must be based on similarity to the instruction considering both the name and the feature type (e.g., "restaurant", "library", "park").  
+   - Only use places from the provided list, each in the format `{name, "feature"}`.  
+   - In the output, **only show the place name without the feature**.
+
+2. Extract path constraints, including:
+   - If a place must be passed through, include it in the "waypoint" list.  
+   - If a place must be avoided, include it in the "avoidance" list.  
+   - Other conditions (e.g., avoid stairs, minimize exposure to rain) should be written under "condition".
+
+3. Return your result in the following format:
+
+destination: [1st, 2nd, 3rd, 4th]  
+waypoint: [list of waypoints]  
+avoidance: [list of places to avoid]  
+condition: constraint description
+
+Rules:
+- If there are fewer than 4 possible candidates, fill the remaining ranks with "None".  
+- If there are no waypoints or places to avoid, return empty lists.  
+- "condition" should be "No condition" if there are no additional constraints.  
+- Always decide ranking based on both name and feature type, even if feature type is not shown in the output.
+- If the user says(X and Y are integers):
+    - "number X then number Y"
+    - "after node X then node Y"
+    - "X-Y"  
+   → Add "X-Y" to the waypoints list at the correct position.  
+---
+
+Examples:
+
+[instruction]  
+"Go to Jaha-yeon"  
+[Output]  
+destination: [Jaha-yeon, Student Cafeteria, Central Park, None]  
+waypoint: []  
+avoidance: []  
+condition: No condition
+
+---
+
+[instruction]  
+"Go to the library while avoiding getting the books wet from the rain"  
+[Output]  
+destination: [University Library, Student Center, KB Bank, None]  
+waypoint: []  
+avoidance: []  
+condition: Pass through indoor passages
+
+---
+
+[instruction]  
+"On the way to the library, pass by KB Bank and the Student Center, but avoid the construction site."  
+[Output]  
+destination: [University Library, Central Park, Student Cafeteria, Museum]  
+waypoint: [KB Bank, Student Center]  
+avoidance: [Construction Site]  
+condition: No condition
+
+---
+
+[instruction]
+"After node 10, go straight to node 5 before continuing to the Global Education Center for Engineers"
+[Output]
+destination: [Global Education Center for Engineers, Engineering Building 301, Engineering Building 302, None]
+waypoint: [10-5]
+avoidance: []
+condition: No condition
+
+---
+
+Now complete the following task:
